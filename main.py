@@ -9,6 +9,7 @@ COMPANY_NAME = "Apple Inc"
 
 load_dotenv()
 STOCK_KEY = os.getenv("STOCK_API_KEY")
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
 stock_parameters ={
     "function": "TIME_SERIES_DAILY",
@@ -58,6 +59,30 @@ if abs(diff_in_percentage) > 5:
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME.
+
+news_api_parameters = {
+    "q": "Apple",
+    "from": "2024-02-15",
+    "language": "en",
+    "sortBy": "popularity",
+    "apiKey": NEWS_API_KEY
+}
+
+news_api_endpoint = "https://newsapi.org/v2/everything"
+response = requests.get(news_api_endpoint, params=news_api_parameters)
+response.raise_for_status()
+news_data = response.json()
+
+message = []
+for i in range(3):
+    article_title = news_data["articles"][i]["title"]
+    article_description = news_data["articles"][i]["description"]
+    article_link = news_data["articles"][i]["url"]
+    message.append(f"{article_title}\n"
+        f"{article_description}\n"
+        f"{article_link}"
+        )
+
 
 
 ## STEP 3: Use https://www.twilio.com

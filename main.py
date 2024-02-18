@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from twilio.rest import Client
 
 STOCK = "AAPL"
-COMPANY_NAME = "Apple Inc"
+COMPANY_NAME = "Apple"
 
 load_dotenv()
 STOCK_KEY = os.getenv("STOCK_API_KEY")
@@ -20,9 +20,10 @@ stock_parameters ={
     "apikey": STOCK_KEY
 }
 stock_api_endpoint ="https://www.alphavantage.co/query"
-today = date.today()
 
+# TODO Remove this part it is not needed
 # Check if it is Sunday of Monday
+today = date.today()
 if today.weekday() == 0:
     yesterday = today - timedelta(days=3)
     before_yesterday = yesterday - timedelta(days=1)
@@ -37,6 +38,7 @@ else:
 yesterday = str(yesterday)
 before_yesterday = str(before_yesterday)
 
+# TODO Get the time series daily data into a list and chose first 2 element
 # Get the stock data
 response = requests.get(stock_api_endpoint, params=stock_parameters)
 response.raise_for_status()
@@ -64,7 +66,7 @@ else:
 
 # Check news if stock is changed by 5% if yes send the TOP 3 article
 news_api_parameters = {
-    "q": "Apple",
+    "q": COMPANY_NAME,
     "searchIn": "title",
     "language": "en",
     "sortBy": "popularity",

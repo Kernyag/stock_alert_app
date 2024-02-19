@@ -21,38 +21,22 @@ stock_parameters ={
 }
 stock_api_endpoint ="https://www.alphavantage.co/query"
 
-# TODO Remove this part it is not needed
-# Check if it is Sunday of Monday
-today = date.today()
-if today.weekday() == 0:
-    yesterday = today - timedelta(days=3)
-    before_yesterday = yesterday - timedelta(days=1)
-elif today.weekday() == 6:
-    yesterday = today - timedelta(days=2)
-    before_yesterday = yesterday - timedelta(days=1)
-else:
-    yesterday = today - timedelta(days=1)
-    before_yesterday = yesterday - timedelta(days=1)
-
-# Save dates
-yesterday = str(yesterday)
-before_yesterday = str(before_yesterday)
-
-# TODO Get the time series daily data into a list and chose first 2 element
 # Get the stock data
-response = requests.get(stock_api_endpoint, params=stock_parameters)
+"""response = requests.get(stock_api_endpoint, params=stock_parameters)
 response.raise_for_status()
-stock_data = response.json()
+stock_data = response.json()["Time Series (Daily)"]"""
 # Saving a file for debugging
-"""with open("daily_AAPL.json", mode="w") as file:
+"""with open("daily_AAPL_debug.json", mode="w") as file:
     json.dump(stock_data, file, indent=4)"""
 # For debugging
-"""with open("dummy_data.json", mode="r") as file:
-    stock_data = json.load(file)"""
+with open("daily_AAPL_debug.json", mode="r") as file:
+    stock_data = json.load(file)
+
+stock_data = [value for (key, value) in stock_data.items()]
 
 # Get the closing values
-yesterday_close_value = float(stock_data["Time Series (Daily)"][yesterday]["4. close"])
-before_yesterday_close_value = float(stock_data["Time Series (Daily)"][before_yesterday]["4. close"])
+yesterday_close_value = float(stock_data[0]["4. close"])
+before_yesterday_close_value = float(stock_data[1]["4. close"])
 
 # Calculate diff
 close_value_diff_usd = yesterday_close_value - before_yesterday_close_value
@@ -97,4 +81,6 @@ if abs(diff_in_percentage) > 5:
                     to='+36209439294'
                 )
         print(message.status)
+else:
+    print("No big price movement")
 

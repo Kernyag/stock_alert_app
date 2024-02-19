@@ -22,15 +22,15 @@ stock_parameters ={
 stock_api_endpoint ="https://www.alphavantage.co/query"
 
 # Get the stock data
-"""response = requests.get(stock_api_endpoint, params=stock_parameters)
+response = requests.get(stock_api_endpoint, params=stock_parameters)
 response.raise_for_status()
-stock_data = response.json()["Time Series (Daily)"]"""
+stock_data = response.json()["Time Series (Daily)"]
 # Saving a file for debugging
 """with open("daily_AAPL_debug.json", mode="w") as file:
     json.dump(stock_data, file, indent=4)"""
 # For debugging
-with open("daily_AAPL_debug.json", mode="r") as file:
-    stock_data = json.load(file)
+"""with open("daily_AAPL_debug.json", mode="r") as file:
+    stock_data = json.load(file)"""
 
 stock_data = [value for (key, value) in stock_data.items()]
 
